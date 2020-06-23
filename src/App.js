@@ -4,20 +4,35 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TodoInput from './components/TodoInput';
 import TodoList from './components/TodoList';
 
-//Showing VPP
 class App extends Component {
   state = {
-    items: [{ id: 1, title: "Morning"}, { id: 2, title: "Breakfast"}],
+    items: [],
     id: uuid(),
     item: "",
     editItem: false
   };
-  
+
   handleChange = (e) =>{
-    console.log('handle Change');
+    this.setState({
+      item:e.target.value
+    });
   };
   handleSubmit = (e) =>{
-    console.log('handle Submit');
+    e.preventDefault();
+    const newItem = {
+      id:this.state.id,
+      title:this.state.item
+    }
+    const updatedItems = [...this.state.items, newItem];
+    this.setState({
+      items:updatedItems,
+      item:"",
+      id:uuid(),
+      editItem:false
+    },
+    () => console.log(this.state)
+  );
+
   };
   clearList = () =>{
     console.log('Clear List');
@@ -35,13 +50,13 @@ class App extends Component {
         <div className="row">
           <div className="col-10 mx-auto col-md-8 mt-5">
             <h3 className="text-capitalize text-center">todo input</h3>
-            <TodoList
+            <TodoInput
               item={this.state.item}
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
               editItem={this.state.editItem}
             />
-            <TodoInput
+          <TodoList
               items={this.state.items}
               clearList={this.clearList}
               handleDelete={this.handleDelete}
